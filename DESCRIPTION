@@ -1,0 +1,14 @@
+Package: fluoroClust
+Type: Package
+Title: Cluster flow cytometry data in 1 dimension
+Version: 1.0
+Date: 2016-09-05
+Authors@R: person("Fedorec", "Alex J H", , "alexander.fedorec.13@ucl.ac.uk", c("aut", "cre"))
+Author: Alex J H Fedorec [aut, cre]
+Maintainer: Alex J H Fedorec <alexander.fedorec.13@ucl.ac.uk>
+Description: A function to cluster flow cytometry data by one fluorescence dimension in to "on" and "off" populations.
+Imports:
+    flowClust,
+    flowCore
+License: GPL-2
+RoxygenNote: 5.0.1
