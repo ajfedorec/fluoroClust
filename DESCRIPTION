@@ -9,6 +9,7 @@ Maintainer: Alex J H Fedorec <alexander.fedorec.13@ucl.ac.uk>
 Description: A function to cluster flow cytometry data by one fluorescence dimension in to "on" and "off" populations.
 Imports:
     flowClust,
-    flowCore
+    flowCore,
+    ggplot2
 License: GPL-2
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

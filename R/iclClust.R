@@ -39,26 +39,54 @@ iclClust <- function( fF, channel, prior.max, prior.min, do.plot ){
       newF <- data.frame(num_samples=length(flowClust.res@label),
                          max_clust_mean=est$locationsC,
                          max_clust_prop=est$proportions)
-    }
-    ## otherwise assume it is plasmid-free
-    else{
+
+      ## otherwise assume it is plasmid-free
+    } else{
       newF <- data.frame(num_samples=length(flowClust.res@label),
                          max_clust_mean=est$locationsC,
                          max_clust_prop=0)
     }
-  }
-  ## otherwise take the proportion of the peak with the highest mean fluorescence
-  else{
+
+    ## otherwise take the proportion of the peak with the highest mean fluorescence
+  } else{
     newF <- data.frame(num_samples=length(flowClust.res@label),
                        max_clust_mean=est$locationsC[which.max(est$locationsC)],
                        max_clust_prop=est$proportions[which.max(est$locationsC)])
   }
   if(do.plot){
     filename <- substr(flowCore::keyword(fF, "FILENAME"), 1, nchar(flowCore::keyword(fF, "FILENAME"))-4)
-    grDevices::png(paste(filename, "_clusters.png", sep=""))
-    flowClust::hist(flowClust.res, data=fF, xlim=c(0,7),
-                    main=paste("ICL clustered\n", flowCore::identifier(fF)))
-    grDevices::dev.off()
+
+    splt.fF <- flowClust::split(fF, flowClust.res)
+
+    plt <- ggplot2::ggplot() +
+      ggplot2::geom_density(data = as.data.frame(splt.fF[[1]][, channel]@exprs),
+                            ggplot2::aes(x = splt.fF[[1]][, channel]@exprs, y = ..count..),
+                            alpha = 0.5,
+                            fill = "black")+
+      ggplot2::geom_density(data = as.data.frame(splt.fF[[2]][, channel]@exprs),
+                         ggplot2::aes(x = splt.fF[[2]][, channel]@exprs, y = ..count..),
+                         alpha = 0.5,
+                         fill = "green")+
+      ggplot2::xlab(channel) +
+      ggplot2::ylab("") +
+      ggplot2::xlim(0, 7) +
+      ggplot2::theme_bw()+
+      ggplot2::theme(axis.text.y = ggplot2::element_blank(),
+                     axis.ticks.y = ggplot2::element_blank(),
+                     strip.text.x = ggplot2::element_text(size=14),
+                     strip.background = ggplot2::element_rect(colour="white"),
+                     axis.text = ggplot2::element_text(size=10),
+                     axis.text.x = ggplot2::element_text(angle=-40, vjust = 0.5),
+                     axis.title = ggplot2::element_text(size=14),
+                     text=ggplot2::element_text(family='Garamond'),
+                     panel.grid.major=ggplot2::element_blank(),
+                     panel.grid.minor=ggplot2::element_blank(),
+                     panel.border=ggplot2::element_blank(),
+                     axis.line=ggplot2::element_line(),
+                     legend.title=ggplot2::element_blank())
+
+    ggplot2::ggsave(filename = paste(filename, "_clusters.png", sep=""), plot = plt)
+
     print(paste("Plotting cluster ", flowCore::identifier(fF)))
   }
 

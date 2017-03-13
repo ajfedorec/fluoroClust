@@ -10,11 +10,15 @@ fluoroClust(fF, clust.type = "ICL", channel = "BL1-H", prior.max = 5,
 \arguments{
 \item{fF}{a \code{\link[flowCore]{flowFrame}} to cluster.}
 
+\item{clust.type}{choose a clustering method; "ICL" or "crude".}
+
 \item{channel}{the fluorescence channel on which to cluster.}
 
 \item{prior.max}{the expected location of the "on" peak.}
 
 \item{prior.min}{the expected location of the "off" peak.}
+
+\item{crude.threshold}{the threshold to use if the "crude" method is chosen.}
 
 \item{do.plot}{a Boolean flag to determine whether to produce plots showing the trimming of each flowFrame. Defaults to \code{FALSE}.}
 }
@@ -29,4 +33,3 @@ Cluster data in a \code{\link[flowCore]{flowFrame}} using the \code{\link[flowCl
 package. Given a fluorescence channel and, optionally, prior values for the on and off
 peak locations, determines how many clusters there are and produces information on the populations.
 }
-
