@@ -28,4 +28,3 @@ Cluster data in a \code{\link[flowCore]{flowFrame}} using the \code{\link[flowCl
 package. Given a fluorescence channel and, optionally, prior values for the on and off
 peak locations, determines how many clusters there are and produces information on the populations.
 }
-
