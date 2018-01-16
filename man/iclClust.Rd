@@ -4,16 +4,14 @@
 \alias{iclClust}
 \title{A function to cluster flow cytometry data by one fluorescence dimension in to "on" and "off" populations.}
 \usage{
-iclClust(fF, channel, prior.max, prior.min, do.plot)
+iclClust(fF, channel, threshold, do.plot)
 }
 \arguments{
 \item{fF}{a \code{\link[flowCore]{flowFrame}} to cluster.}
 
 \item{channel}{the fluorescence channel on which to cluster.}
 
-\item{prior.max}{the expected location of the "on" peak.}
-
-\item{prior.min}{the expected location of the "off" peak.}
+\item{threshold}{the for plasmid-bearing when only one cluster is found.}
 
 \item{do.plot}{a Boolean flag to determine whether to produce plots showing the trimming of each flowFrame. Defaults to \code{FALSE}.}
 }

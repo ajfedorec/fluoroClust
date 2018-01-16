@@ -6,8 +6,7 @@
 #'
 #' @param fF a \code{\link[flowCore]{flowFrame}} to cluster.
 #' @param channel the fluorescence channel on which to cluster.
-#' @param prior.max the expected location of the "on" peak.
-#' @param prior.min the expected location of the "off" peak.
+#' @param threshold the for plasmid-bearing when only one cluster is found.
 #' @param do.plot a Boolean flag to determine whether to produce plots showing the trimming of each flowFrame. Defaults to \code{FALSE}.
 #'
 #' @return a \code{\link{data.frame}} containing \code{num_samples}, the
@@ -17,7 +16,7 @@
 #' @export
 #'
 #' @examples
-iclClust <- function(fF, channel, prior.max, prior.min, do.plot){
+iclClust <- function(fF, channel, threshold, do.plot){
   ## Remove any NaN, NA, Inf or -Inf values from the flowFrame
   fF <- flowCore::Subset(fF, as.logical(is.finite(flowCore::exprs(fF[, channel]))))
 
@@ -30,12 +29,8 @@ iclClust <- function(fF, channel, prior.max, prior.min, do.plot){
 
   ## If there is only 1 cluster, is it plasmid-free or plasmid-bearing
   if (length(est$locationsC) == 1) {
-    ## distance of the peak from the base fluorescence
-    dist.fM <- (est$locationsC - prior.min)^2
-    dist.fP <- (est$locationsC - prior.max)^2
-
-    ## if the peak is closer to the plasmid-bearing base fluorescence...
-    if (dist.fM > dist.fP) {
+    ## if the peak is above the threshold assume it is plasmid-bearing...
+    if (est$locationsC > threshold) {
       newF <- data.frame(num_samples = length(flowClust.res@label),
                          max_clust_mean = est$locationsC,
                          max_clust_prop = est$proportions)
@@ -55,11 +50,11 @@ iclClust <- function(fF, channel, prior.max, prior.min, do.plot){
   }
   if (do.plot) {
     filename <- substr(flowCore::keyword(fF, "FILENAME"), 1, nchar(flowCore::keyword(fF, "FILENAME")) - 4)
-    pdf(file = paste(filename, "_clusters.pdf", sep = ""), width = 4, height = 4)
+    grDevices::pdf(file = paste(filename, "_ICL_clusters.pdf", sep = ""), width = 4, height = 4)
 
     flowClust::plot(x = flowClust.res, data = fF)
 
-    dev.off()
+    grDevices::dev.off()
     # splt.fF <- flowClust::split(fF, flowClust.res)
     #
     # plt <- ggplot2::ggplot() +
