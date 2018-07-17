@@ -20,7 +20,8 @@ mindensityClust <- function(fF, channel, threshold, do.plot){
   ## Remove any NaN, NA, Inf or -Inf values from the flowFrame
   fF <- flowCore::Subset(fF, as.logical(is.finite(flowCore::exprs(fF[, channel]))))
 
-  g <- openCyto::mindensity(fF, channel = channel)
+  g <- openCyto::mindensity2(fF, channel = channel,
+                             gate_range = c(threshold-0.5, threshold+0.5))
 
   pb.clust <- flowCore::Subset(fF, g)
 
@@ -29,8 +30,10 @@ mindensityClust <- function(fF, channel, threshold, do.plot){
                      max_clust_prop = flowCore::nrow(pb.clust) / flowCore::nrow(fF))
 
   if (do.plot) {
+    library(ggcyto)
     plt <- ggplot2::autoplot(fF, channel) +
       ggcyto::geom_gate(g) +
+      ggplot2::scale_x_continuous(limits = c(0,7)) +
       ggplot2::theme_classic() +
       ggplot2::theme(strip.text = ggplot2::element_blank(),
                      strip.background = ggplot2::element_blank(),

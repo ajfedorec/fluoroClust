@@ -7,7 +7,7 @@
 #' @param fF a \code{\link[flowCore]{flowFrame}} to cluster.
 #' @param clust.type choose a clustering method; "ICL", "mindensity" or "crude".
 #' @param channel the fluorescence channel on which to cluster.
-#' @param threshold the threshold to use to identify plasmid-bearing if only 1 peak is found.
+#' @param threshold the threshold used in crude clustering or to identify plasmid-bearing if only 1 peak is found in ICL and mindensity clustering.
 #' @param do.plot a Boolean flag to determine whether to produce plots showing the trimming of each flowFrame. Defaults to \code{FALSE}.
 #'
 #' @return a \code{\link{data.frame}} containing \code{num_samples}, the
